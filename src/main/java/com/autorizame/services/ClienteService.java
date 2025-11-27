@@ -113,6 +113,19 @@ public class ClienteService {
 		
 	}
 	
+	// Método para eliminar un usuario del sistema
+	public void eliminarCliente(Long id) {
+		
+		if(!clienteRepository.buscarPorID(id).isPresent()) {
+			throw new RecursoNoEncontradoException("No se puede eliminar. El usuario con id " + id + " no existe.");
+		}
+		
+		clienteRepository.borrarClientePorID(id);
+		
+		// TODO: Quedaría mandar el correo pero no puedo ahora mismo
+		
+	}
+	
 }
 
 

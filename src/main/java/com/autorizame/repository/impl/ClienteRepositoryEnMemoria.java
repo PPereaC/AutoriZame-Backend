@@ -50,5 +50,10 @@ public class ClienteRepositoryEnMemoria implements ClienteRepository{
 		return Optional.ofNullable(clientes.get(id));
 		
 	}
+
+	@Override
+	public void borrarClientePorID(Long id) {
+		clientes.remove(id);
+	}
 	
 }

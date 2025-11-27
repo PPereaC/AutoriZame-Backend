@@ -1,7 +1,11 @@
 package com.autorizame.controllers;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -56,6 +60,19 @@ public class ClienteController {
 		
 		// Se devuelve el objeto creado y el código HTTP 200 OK
 		return new ResponseEntity<>(clienteActualizado, HttpStatus.OK);
+		
+	}
+	
+	// Eliminar un cliente del sistema
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Map<String, String>> eliminarCliente(@PathVariable Long id) {
+		
+		clienteService.eliminarCliente(id);
+		
+		Map<String, String> respuesta = new HashMap<>();
+		respuesta.put("mensaje", "Cliente eliminado correctamente del sistema");
+		
+		return new ResponseEntity<>(respuesta, HttpStatus.OK);
 		
 	}
 	
