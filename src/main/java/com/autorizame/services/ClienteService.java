@@ -22,7 +22,6 @@ public class ClienteService {
 		this.clienteRepository = clienteRepository;
 	}
 	
-	// Este método será llamado por el Controlador
 	public ClienteResponseDTO registrarCliente(ClienteRegistroDTO dto) {
 		
 		// Comprobar si el email existe
