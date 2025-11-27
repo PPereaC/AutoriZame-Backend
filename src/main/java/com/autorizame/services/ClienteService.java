@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.autorizame.exception.EmailDuplicadoException;
+import com.autorizame.exception.RecursoNoEncontradoException;
 import com.autorizame.models.dto.ClienteRegistroDTO;
 import com.autorizame.models.dto.ClienteResponseDTO;
 import com.autorizame.models.entity.Cliente;
@@ -48,6 +49,26 @@ public class ClienteService {
 		respuesta.setDireccionEthereum(clienteGuardado.getDireccionEthereum());
 		respuesta.setFechaRegistro(clienteGuardado.getFechaRegistro());
         
+		return respuesta;
+		
+	}
+	
+	public ClienteResponseDTO buscarPorID(Long id) {
+		
+		Optional<Cliente> clienteEncontrado = clienteRepository.buscarPorID(id);
+		if(!clienteEncontrado.isPresent()) {
+			throw new RecursoNoEncontradoException(
+					"El usuario con el id [" + id + "] no está registrado"
+			);
+		}
+
+		ClienteResponseDTO respuesta = new ClienteResponseDTO();
+		respuesta.setId(clienteEncontrado.get().getId());
+		respuesta.setNombre(clienteEncontrado.get().getNombre());
+		respuesta.setEmail(clienteEncontrado.get().getEmail());
+		respuesta.setDireccionEthereum(clienteEncontrado.get().getDireccionEthereum());
+		respuesta.setFechaRegistro(clienteEncontrado.get().getFechaRegistro());
+		
 		return respuesta;
 		
 	}

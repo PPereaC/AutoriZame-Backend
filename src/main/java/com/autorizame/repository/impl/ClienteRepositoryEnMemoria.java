@@ -43,5 +43,12 @@ public class ClienteRepositoryEnMemoria implements ClienteRepository{
 		// Si no se encuentra se manda como vacío
 		return Optional.empty();
 	}
+
+	@Override
+	public Optional<Cliente> buscarPorID(Long id) {
+		
+		return Optional.ofNullable(clientes.get(id));
+		
+	}
 	
 }

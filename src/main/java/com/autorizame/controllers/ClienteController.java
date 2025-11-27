@@ -2,6 +2,8 @@ package com.autorizame.controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,11 +29,21 @@ public class ClienteController {
 	@PostMapping
 	public ResponseEntity<ClienteResponseDTO> registrar(@Valid @RequestBody ClienteRegistroDTO dto) {
 		
-		// Se llama al servicio
 		ClienteResponseDTO nuevoCliente = clienteService.registrarCliente(dto);
 		
 		// Se devuelve el objeto creado y el código HTTP 201 CREATED
 		return new ResponseEntity<>(nuevoCliente, HttpStatus.CREATED);
+	}
+	
+	// Obtener un usuario mediante su ID
+	@GetMapping("/{id}")
+	public ResponseEntity<ClienteResponseDTO> buscarPorID(@PathVariable Long id) {
+		
+		ClienteResponseDTO clienteBuscado = clienteService.buscarPorID(id);
+		
+		// Se devuelve el objeto creado y el código HTTP 200 OK
+		return new ResponseEntity<>(clienteBuscado, HttpStatus.OK);
+		
 	}
 	
 }

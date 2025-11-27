@@ -8,4 +8,5 @@ public interface ClienteRepository {
 
 	Cliente guardar(Cliente cliente);
 	Optional<Cliente> buscarPorEmail(String email);
+	Optional<Cliente> buscarPorID(Long id);
 }
