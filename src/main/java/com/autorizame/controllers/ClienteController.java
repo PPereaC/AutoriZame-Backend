@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,6 +44,18 @@ public class ClienteController {
 		
 		// Se devuelve el objeto creado y el código HTTP 200 OK
 		return new ResponseEntity<>(clienteBuscado, HttpStatus.OK);
+		
+	}
+	
+	// Actualizar los datos de un usuario
+	@PutMapping("/{id}")
+	public ResponseEntity<ClienteResponseDTO> actualizarDatosCliente(@PathVariable Long id,
+			@Valid @RequestBody ClienteRegistroDTO dto) {
+		
+		ClienteResponseDTO clienteActualizado = clienteService.actualizarCliente(id, dto);
+		
+		// Se devuelve el objeto creado y el código HTTP 200 OK
+		return new ResponseEntity<>(clienteActualizado, HttpStatus.OK);
 		
 	}
 	

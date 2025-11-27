@@ -32,5 +32,15 @@ public class GlobalExceptionHandler {
         
         return new ResponseEntity<>(respuesta, HttpStatus.NOT_FOUND);
     }
+	
+	@ExceptionHandler(DatosUsuarioNoCoincidenException.class)
+    public ResponseEntity<Map<String, Object>> manejarDatosUsuarioNoCoincide(DatosUsuarioNoCoincidenException ex) {
+        Map<String, Object> respuesta = new HashMap<>();
+        respuesta.put("timestamp", LocalDateTime.now());
+        respuesta.put("mensaje", ex.getMessage());
+        respuesta.put("estado", HttpStatus.CONFLICT); // 409
+        
+        return new ResponseEntity<>(respuesta, HttpStatus.CONFLICT);
+    }
 
 }

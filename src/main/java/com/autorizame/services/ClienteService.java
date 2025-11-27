@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.autorizame.exception.DatosUsuarioNoCoincidenException;
 import com.autorizame.exception.EmailDuplicadoException;
 import com.autorizame.exception.RecursoNoEncontradoException;
 import com.autorizame.models.dto.ClienteRegistroDTO;
@@ -73,4 +74,58 @@ public class ClienteService {
 		
 	}
 	
+	public ClienteResponseDTO actualizarCliente(Long id, ClienteRegistroDTO dto) {
+		
+		Cliente clienteExistente = clienteRepository.buscarPorID(id).orElseThrow(
+				() -> new RecursoNoEncontradoException(
+						"El usuario con el id [" + id + "] no está registrado"
+		));
+		
+		
+		// Validar email, para que no haya otro usuario con ese correo electrónico
+		Optional<Cliente> otroClienteConEseEmail = clienteRepository.buscarPorEmail(dto.getEmail());
+		if(otroClienteConEseEmail.isPresent()) {
+			if(!otroClienteConEseEmail.get().getId().equals(id)) {
+				throw new DatosUsuarioNoCoincidenException(
+					"El correo " + dto.getEmail() + " ya está en uso por otro usuario."
+				);
+			}
+		}
+		
+		// Actualizar los nuevos datos del cliente
+		clienteExistente.setNombre(dto.getNombre());
+	    clienteExistente.setEmail(dto.getEmail());
+	    clienteExistente.setContrasena(dto.getContrasena());
+	    clienteExistente.setDireccionEthereum(dto.getDireccionEthereum());
+	    
+	    // Guardar el nuevo cliente
+	    Cliente clienteGuardado = clienteRepository.guardar(clienteExistente);
+	    
+	    // Respuesta que se manda en la llamada a la API con los datos actualizados del usuario
+	    ClienteResponseDTO respuesta = new ClienteResponseDTO();
+	    respuesta.setId(clienteGuardado.getId());
+	    respuesta.setNombre(clienteGuardado.getNombre());
+	    respuesta.setEmail(clienteGuardado.getEmail());
+	    respuesta.setDireccionEthereum(clienteGuardado.getDireccionEthereum());
+	    respuesta.setFechaRegistro(clienteGuardado.getFechaRegistro());
+	    
+	    return respuesta;
+		
+	}
+	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
