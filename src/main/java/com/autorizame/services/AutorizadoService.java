@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.autorizame.exception.AutorizadoDuplicadoException;
+import com.autorizame.exception.DatosUsuarioNoCoincidenException;
 import com.autorizame.exception.RecursoNoEncontradoException;
 import com.autorizame.models.dto.AutorizadoRegistroDTO;
 import com.autorizame.models.dto.AutorizadoResponseDTO;
@@ -15,6 +16,8 @@ import com.autorizame.models.dto.ListarAutorizadosDTO;
 import com.autorizame.models.entity.Autorizado;
 import com.autorizame.repository.AutorizadoRepository;
 import com.autorizame.repository.ClienteRepository;
+
+import jakarta.validation.Valid;
 
 @Service
 public class AutorizadoService {
@@ -94,7 +97,39 @@ public class AutorizadoService {
 		
 	}
 	
-	
+	public AutorizadoResponseDTO actualizarDatosAutorizado(Long clienteId, String dni, AutorizadoRegistroDTO dto) {
+		
+		// Comprobar que exista el cliente
+		if(!clienteRepository.buscarPorID(clienteId).isPresent()) {
+			throw new RecursoNoEncontradoException("El cliente con id [" + clienteId + "] no existe");
+		}
+		
+		// Comprobar que exista un autorizado con ese clienteId y ese DNI
+		if(!autorizadoRepository.buscarPorClienteIdYDni(clienteId, dni).isPresent()) {
+			throw new DatosUsuarioNoCoincidenException("No hay ningun autorizado con dni " + dni +
+					" asociado al cliente con id " + clienteId);
+		}
+		
+		Optional<Autorizado> autorizadoExistente = autorizadoRepository.buscarPorDni(dni);
+		autorizadoExistente.get().setNombre(dto.getNombre());
+		autorizadoExistente.get().setTelefono(dto.getTelefono());
+		autorizadoExistente.get().setDireccionEthereum(dto.getDireccionEthereum());
+
+
+		Autorizado autorizadoGuardado = autorizadoRepository.guardar(autorizadoExistente.get());
+		
+		AutorizadoResponseDTO respuesta = new AutorizadoResponseDTO();
+		respuesta.setNombre(autorizadoGuardado.getNombre());
+		respuesta.setTelefono(autorizadoGuardado.getTelefono());
+		respuesta.setClienteId(autorizadoGuardado.getClienteId());
+		respuesta.setDireccionEthereum(autorizadoGuardado.getDireccionEthereum());
+		respuesta.setDni(autorizadoGuardado.getDni());
+		respuesta.setFechaRegistro(autorizadoGuardado.getFechaRegistro());
+		respuesta.setId(autorizadoGuardado.getId());
+
+		return respuesta;
+		
+	}
 	
 	
 	

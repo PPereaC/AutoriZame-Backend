@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -57,5 +58,27 @@ public class AutorizadosController {
 		return new ResponseEntity<>(autorizados, HttpStatus.OK);
 		
 	}
+	
+	// Endpoint para actualizar los datos de un autorizado
+	@PutMapping("/clientes/{clienteId}/autorizados")
+	public ResponseEntity<AutorizadoResponseDTO> actualizarAutorizado(@Valid @PathVariable Long clienteId, @Valid @RequestBody AutorizadoRegistroDTO dto) {
+		
+		AutorizadoResponseDTO autorizadoActualizado = autorizadoService.actualizarDatosAutorizado(clienteId, dto.getDni(), dto);
+		
+		return new ResponseEntity<>(autorizadoActualizado, HttpStatus.OK);
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 }
