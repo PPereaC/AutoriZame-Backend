@@ -1,6 +1,8 @@
 package com.autorizame.services;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -9,6 +11,7 @@ import com.autorizame.exception.AutorizadoDuplicadoException;
 import com.autorizame.exception.RecursoNoEncontradoException;
 import com.autorizame.models.dto.AutorizadoRegistroDTO;
 import com.autorizame.models.dto.AutorizadoResponseDTO;
+import com.autorizame.models.dto.ListarAutorizadosDTO;
 import com.autorizame.models.entity.Autorizado;
 import com.autorizame.repository.AutorizadoRepository;
 import com.autorizame.repository.ClienteRepository;
@@ -65,5 +68,43 @@ public class AutorizadoService {
 		return respuesta;
 		
 	}
+	
+	public List<ListarAutorizadosDTO> listarAutorizados(Long clienteId) {
+		
+		if(!clienteRepository.buscarPorID(clienteId).isPresent()) {
+			throw new RecursoNoEncontradoException("El cliente con id [" + clienteId + "] no existe");
+		}
+		
+		List<Autorizado> autorizadosEntidad = autorizadoRepository.buscarPorIDCliente(clienteId);
+		List<ListarAutorizadosDTO> listaRespuesta = new ArrayList<>();
+		
+		for (Autorizado autorizado : autorizadosEntidad) {
+			ListarAutorizadosDTO dto = new ListarAutorizadosDTO(
+					autorizado.getId(),
+					autorizado.getNombre(),
+					autorizado.getDni(),
+					autorizado.getTelefono()
+			);
+			
+			listaRespuesta.add(dto);
+			
+		}
+		
+		return listaRespuesta;
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 }

@@ -1,6 +1,8 @@
 package com.autorizame.repository.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -30,15 +32,18 @@ public class AutorizadoRepositoryEnMemoria implements AutorizadoRepository {
 	}
 	
 	@Override
-	public Optional<Autorizado> buscarPorIDCliente(Long clienteID) {
-		
-		for (Autorizado autorizado : autorizados.values()) {
-			if(autorizado.getClienteId().equals(clienteID)) {
-				return Optional.of(autorizado);
-			}
-		}
-		
-		return Optional.empty();
+	public List<Autorizado> buscarPorIDCliente(Long clienteID) {
+	    
+	    List<Autorizado> listaEncontrada = new ArrayList<>();
+	    
+	    for (Autorizado autorizado : autorizados.values()) {
+	        
+	        if (autorizado.getClienteId().equals(clienteID)) {
+	            listaEncontrada.add(autorizado);
+	        }
+	    }
+	    
+	    return listaEncontrada;
 	}
 	
 	@Override
