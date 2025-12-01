@@ -12,6 +12,6 @@ public interface AutorizadoRepository {
 	Optional<Autorizado> buscarPorDni(String dni);
 	Optional<Autorizado> buscarPorID(Long id);
 	Optional<Autorizado> buscarPorClienteIdYDni(Long clienteId, String dni);
-	void borrarAutorizadoPorID(Long id);
+	void borrarAutorizado(Long clienteID, String dni);
 }
 

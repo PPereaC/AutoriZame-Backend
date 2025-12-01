@@ -17,8 +17,6 @@ import com.autorizame.models.entity.Autorizado;
 import com.autorizame.repository.AutorizadoRepository;
 import com.autorizame.repository.ClienteRepository;
 
-import jakarta.validation.Valid;
-
 @Service
 public class AutorizadoService {
 
@@ -128,6 +126,17 @@ public class AutorizadoService {
 		respuesta.setId(autorizadoGuardado.getId());
 
 		return respuesta;
+		
+	}
+	
+	public void eliminarAutorizado(Long clienteID, String dni) {
+		
+		if(!autorizadoRepository.buscarPorClienteIdYDni(clienteID, dni).isPresent()) {
+			throw new RecursoNoEncontradoException("No existe un autorizado con clienteID ["
+					+ clienteID + "] y dni " + dni);
+		}
+		
+		autorizadoRepository.borrarAutorizado(clienteID, dni);
 		
 	}
 	

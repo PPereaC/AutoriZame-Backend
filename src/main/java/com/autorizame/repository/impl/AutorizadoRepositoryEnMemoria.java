@@ -71,9 +71,18 @@ public class AutorizadoRepositoryEnMemoria implements AutorizadoRepository {
 	}
 	
 	@Override
-	public void borrarAutorizadoPorID(Long id) {
+	public void borrarAutorizado(Long clienteID, String dni) {
+
+		Long idEncontrado = null;
 		
-		autorizados.remove(id);
+		for (Autorizado autorizado : autorizados.values()) {
+			if(autorizado.getDni().equalsIgnoreCase(dni)) {
+				idEncontrado = autorizado.getId();			}
+		}
+		
+		if(idEncontrado != null) {
+			autorizados.remove(idEncontrado);			
+		}
 		
 	}
 
