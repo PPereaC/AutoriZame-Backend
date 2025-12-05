@@ -53,7 +53,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(respuesta, HttpStatus.CONFLICT);
     }
 	
-	@ExceptionHandler(AutorizadoDuplicadoException.class)
+	@ExceptionHandler(EmpresaDuplicadaException.class)
     public ResponseEntity<Map<String, Object>> manejarEmpresasDuplicadas(EmpresaDuplicadaException ex) {
         Map<String, Object> respuesta = new HashMap<>();
         respuesta.put("timestamp", LocalDateTime.now());

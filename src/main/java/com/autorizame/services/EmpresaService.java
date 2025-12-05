@@ -1,15 +1,10 @@
 package com.autorizame.services;
 
-import java.time.LocalDateTime;
-
 import org.springframework.stereotype.Service;
 
-import com.autorizame.exception.EmailDuplicadoException;
 import com.autorizame.exception.EmpresaDuplicadaException;
-import com.autorizame.models.dto.ClienteResponseDTO;
 import com.autorizame.models.dto.EmpresaRegistroDTO;
 import com.autorizame.models.dto.EmpresaResponseDTO;
-import com.autorizame.models.entity.Cliente;
 import com.autorizame.models.entity.EmpresaRepartidora;
 import com.autorizame.repository.EmpresaRepository;
 

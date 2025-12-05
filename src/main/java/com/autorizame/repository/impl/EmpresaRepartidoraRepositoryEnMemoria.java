@@ -4,9 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import org.springframework.stereotype.Repository;
+
 import com.autorizame.models.entity.EmpresaRepartidora;
 import com.autorizame.repository.EmpresaRepository;
 
+@Repository
 public class EmpresaRepartidoraRepositoryEnMemoria implements EmpresaRepository {
 
 	private Map<Long, EmpresaRepartidora> empresas = new HashMap<>();
