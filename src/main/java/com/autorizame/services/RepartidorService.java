@@ -1,9 +1,13 @@
 package com.autorizame.services;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.autorizame.exception.EmailDuplicadoException;
 import com.autorizame.exception.RecursoNoEncontradoException;
+import com.autorizame.models.dto.ListarRepartidoresEmpresaDTO;
 import com.autorizame.models.dto.RepartidorRegistroDTO;
 import com.autorizame.models.dto.RepartidorResponseDTO;
 import com.autorizame.models.entity.Repartidor;
@@ -55,6 +59,25 @@ public class RepartidorService {
 		respuesta.setEstado(repartidorGuardado.getEstado());
         
 		return respuesta;
+		
+	}
+	
+	public List<ListarRepartidoresEmpresaDTO> listarRepartidoresPorEmpresa(Long id) {
+		
+		List<Repartidor> repartidoresEncontrados = repartidorRepository.listarRepartidoresPorEmpresa(id);
+		List<ListarRepartidoresEmpresaDTO> repartidoresRespuesta = new ArrayList<>();
+		
+		for (Repartidor r : repartidoresEncontrados) {
+			ListarRepartidoresEmpresaDTO respuesta = new ListarRepartidoresEmpresaDTO();
+			respuesta.setId(r.getId());
+			respuesta.setNombre(r.getNombre());
+			respuesta.setCorreo(r.getCorreo());
+			respuesta.setEstado(r.getEstado());
+			
+			repartidoresRespuesta.add(respuesta);
+		}
+		
+		return repartidoresRespuesta;
 		
 	}
 	

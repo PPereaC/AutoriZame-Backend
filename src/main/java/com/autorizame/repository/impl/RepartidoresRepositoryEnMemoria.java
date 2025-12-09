@@ -1,6 +1,8 @@
 package com.autorizame.repository.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -44,6 +46,20 @@ public class RepartidoresRepositoryEnMemoria implements RepartidoresRepository {
 		// Si no se encuentra se manda como vacío
 		return Optional.empty();
 		
+	}
+
+	@Override
+	public List<Repartidor> listarRepartidoresPorEmpresa(Long id) {
+		
+		List<Repartidor> repartidoresEncontrados = new ArrayList<>();
+		
+		for (Repartidor r : repartidores.values()) {
+			if(r.getEmpresaId().equals(id)) {
+				repartidoresEncontrados.add(r);
+			}
+		}
+		
+		return repartidoresEncontrados;
 	}
 
 }
