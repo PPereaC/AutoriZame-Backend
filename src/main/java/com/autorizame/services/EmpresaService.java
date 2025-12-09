@@ -1,5 +1,8 @@
 package com.autorizame.services;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.autorizame.exception.EmpresaDuplicadaException;
@@ -43,6 +46,26 @@ public class EmpresaService {
 		        
 		return respuesta;
 		
+	}
+	
+	public List<EmpresaResponseDTO> listarEmpresas() {
+	    
+	    List<EmpresaRepartidora> empresasEntidad = empresaRepository.listarEmpresas();
+	    
+	    List<EmpresaResponseDTO> listaRespuesta = new ArrayList<>();
+	    
+	    for (EmpresaRepartidora empresa : empresasEntidad) {
+
+	        EmpresaResponseDTO dto = new EmpresaResponseDTO();
+	        dto.setId(empresa.getId());
+	        dto.setNombre(empresa.getNombre());
+	        dto.setCorreo(empresa.getCorreo());
+	        dto.setTelefono(empresa.getTelefono());
+
+	        listaRespuesta.add(dto);
+	    }
+	    
+	    return listaRespuesta;
 	}
 	
 }

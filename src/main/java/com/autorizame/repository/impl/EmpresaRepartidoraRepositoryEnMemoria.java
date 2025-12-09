@@ -1,6 +1,8 @@
 package com.autorizame.repository.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -39,6 +41,13 @@ public class EmpresaRepartidoraRepositoryEnMemoria implements EmpresaRepository 
 		}
 		
 		return Optional.empty();
+		
+	}
+
+	@Override
+	public List<EmpresaRepartidora> listarEmpresas() {
+		
+	    return new ArrayList<>(empresas.values());
 		
 	}
 	

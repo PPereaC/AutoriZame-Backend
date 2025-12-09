@@ -1,7 +1,12 @@
 package com.autorizame.controllers;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +36,14 @@ private final EmpresaService empresaService;
 			
 		// Se devuelve el objeto creado y el código HTTP 201 CREATED
 		return new ResponseEntity<>(nuevaEmpresa, HttpStatus.CREATED);
+	}
+	
+	@GetMapping
+	public ResponseEntity<List<EmpresaResponseDTO>> listarTodas() {
+	    
+	    List<EmpresaResponseDTO> lista = empresaService.listarEmpresas();
+	    
+	    return new ResponseEntity<>(lista, HttpStatus.OK);
 	}
 	
 }
