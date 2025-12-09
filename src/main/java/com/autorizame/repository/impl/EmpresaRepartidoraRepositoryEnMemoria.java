@@ -50,5 +50,18 @@ public class EmpresaRepartidoraRepositoryEnMemoria implements EmpresaRepository 
 	    return new ArrayList<>(empresas.values());
 		
 	}
+
+	@Override
+	public Optional<EmpresaRepartidora> buscarPorID(Long id) {
+		
+		for (EmpresaRepartidora e : empresas.values()) {
+			if(e.getId().equals(id)) {
+				return Optional.of(e);
+			}
+		}
+		
+		return Optional.empty();
+		
+	}
 	
 }

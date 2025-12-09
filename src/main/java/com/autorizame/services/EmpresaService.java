@@ -2,10 +2,12 @@ package com.autorizame.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import com.autorizame.exception.EmpresaDuplicadaException;
+import com.autorizame.exception.RecursoNoEncontradoException;
 import com.autorizame.models.dto.EmpresaRegistroDTO;
 import com.autorizame.models.dto.EmpresaResponseDTO;
 import com.autorizame.models.entity.EmpresaRepartidora;
@@ -66,6 +68,36 @@ public class EmpresaService {
 	    }
 	    
 	    return listaRespuesta;
+	}
+	
+	public EmpresaResponseDTO modificarEmpresa(Long id, EmpresaRegistroDTO dto) {
+	    
+	    EmpresaRepartidora empresaExistente = empresaRepository.buscarPorID(id)
+	            .orElseThrow(() -> new RecursoNoEncontradoException("No existe la empresa con id " + id));
+
+	    Optional<EmpresaRepartidora> coincidencia = empresaRepository.buscarPorNombre(dto.getNombre());
+	    
+	    if (coincidencia.isPresent()) {
+	        if (!coincidencia.get().getId().equals(id)) {
+	            throw new EmpresaDuplicadaException(
+	                "El nombre " + dto.getNombre() + " ya está en uso por otra empresa."
+	            );
+	        }
+	    }
+	                    
+	    empresaExistente.setNombre(dto.getNombre());
+	    empresaExistente.setCorreo(dto.getCorreo());
+	    empresaExistente.setTelefono(dto.getTelefono());
+	                    
+	    EmpresaRepartidora empresaGuardada = empresaRepository.guardar(empresaExistente);
+	                    
+	    EmpresaResponseDTO respuesta = new EmpresaResponseDTO();
+	    respuesta.setId(empresaGuardada.getId());
+	    respuesta.setNombre(empresaGuardada.getNombre());
+	    respuesta.setCorreo(empresaGuardada.getCorreo());
+	    respuesta.setTelefono(empresaGuardada.getTelefono());
+	            
+	    return respuesta;
 	}
 	
 }

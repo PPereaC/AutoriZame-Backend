@@ -10,5 +10,6 @@ public interface EmpresaRepository {
 	EmpresaRepartidora guardar(EmpresaRepartidora empresa);
 	Optional<EmpresaRepartidora> buscarPorNombre(String nombre);
 	List<EmpresaRepartidora> listarEmpresas();
+	Optional<EmpresaRepartidora> buscarPorID(Long id);
 	
 }
