@@ -1,6 +1,6 @@
 package com.autorizame.models.entity;
 
-public class Repartidores {
+public class Repartidor {
 
 	private Long id;
 	private String nombre;
@@ -9,9 +9,9 @@ public class Repartidores {
 	private Long empresaId;
 	private String estado;
 	
-	public Repartidores() {}
+	public Repartidor() {}
 
-	public Repartidores(Long id, String nombre, String correo, String telefono, Long empresaId, String estado) {
+	public Repartidor(Long id, String nombre, String correo, String telefono, Long empresaId, String estado) {
 		this.id = id;
 		this.nombre = nombre;
 		this.correo = correo;
