@@ -1,0 +1,61 @@
+package com.autorizame.services;
+
+import org.springframework.stereotype.Service;
+
+import com.autorizame.exception.EmailDuplicadoException;
+import com.autorizame.exception.RecursoNoEncontradoException;
+import com.autorizame.models.dto.RepartidorRegistroDTO;
+import com.autorizame.models.dto.RepartidorResponseDTO;
+import com.autorizame.models.entity.Repartidor;
+import com.autorizame.repository.EmpresaRepository;
+import com.autorizame.repository.RepartidoresRepository;
+
+@Service
+public class RepartidorService {
+
+	private final RepartidoresRepository repartidorRepository;
+	private final EmpresaRepository empresaRepository;
+
+	public RepartidorService(RepartidoresRepository repartidorRepository, EmpresaRepository empresaRepository) {
+		this.repartidorRepository = repartidorRepository;
+		this.empresaRepository = empresaRepository;
+	}
+	
+	public RepartidorResponseDTO registrarRepartidor(Long idEmpresa, RepartidorRegistroDTO dto) {
+		
+		// Comprobar si el email existe
+		if (repartidorRepository.buscarPorCorreo(dto.getCorreo()).isPresent()) {
+			throw new EmailDuplicadoException("El correo " + dto.getCorreo() + " ya está registrado en el sistema.");
+		}
+		
+		// Comprobar si el id de la empresa existe
+		if(!empresaRepository.buscarPorID(idEmpresa).isPresent()) {
+			throw new RecursoNoEncontradoException("La empresa con id " + idEmpresa + " no existe en el sistema");
+		}
+		
+		// Creación de una instancia Repartidor para setearle los datos que vienen del DTO
+		Repartidor nuevoRepartidor = new Repartidor();
+		
+		nuevoRepartidor.setNombre(dto.getNombre());
+		nuevoRepartidor.setCorreo(dto.getCorreo());
+		nuevoRepartidor.setTelefono(dto.getTelefono());
+		nuevoRepartidor.setEstado(dto.getEstado());
+		nuevoRepartidor.setEmpresaId(idEmpresa);
+		
+		// Guardar repartidor en el repositorio
+		Repartidor repartidorGuardado = repartidorRepository.guardar(nuevoRepartidor);
+		
+		RepartidorResponseDTO respuesta = new RepartidorResponseDTO();
+		
+		respuesta.setId(repartidorGuardado.getId());
+		respuesta.setNombre(repartidorGuardado.getNombre());
+		respuesta.setCorreo(repartidorGuardado.getCorreo());
+		respuesta.setTelefono(repartidorGuardado.getTelefono());
+		respuesta.setEmpresaId(repartidorGuardado.getEmpresaId());
+		respuesta.setEstado(repartidorGuardado.getEstado());
+        
+		return respuesta;
+		
+	}
+	
+}
