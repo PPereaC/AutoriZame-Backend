@@ -11,5 +11,6 @@ public interface EmpresaRepository {
 	Optional<EmpresaRepartidora> buscarPorNombre(String nombre);
 	List<EmpresaRepartidora> listarEmpresas();
 	Optional<EmpresaRepartidora> buscarPorID(Long id);
+	void borrarEmpresa(Long id);
 	
 }

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -55,6 +56,19 @@ private final EmpresaService empresaService;
 		
 		return new ResponseEntity<>(respuesta, HttpStatus.OK);
 		
+	}
+	
+	// Eliminar una empresa del sistema
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Map<String, String>> eliminarEmpresa(@PathVariable Long id) {
+			
+		empresaService.eliminarEmpresa(id);
+			
+		Map<String, String> respuesta = new HashMap<>();
+		respuesta.put("mensaje", "Empresa eliminada correctamente del sistema");
+			
+		return new ResponseEntity<>(respuesta, HttpStatus.OK);
+			
 	}
 	
 }

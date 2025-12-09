@@ -100,4 +100,13 @@ public class EmpresaService {
 	    return respuesta;
 	}
 	
+	public void eliminarEmpresa(Long id) {
+		
+		if(!empresaRepository.buscarPorID(id).isPresent()) {
+			throw new RecursoNoEncontradoException("No se puede eliminar. La empresa con id " + id + " no existe.");
+		}
+		
+		empresaRepository.borrarEmpresa(id);
+	}
+	
 }

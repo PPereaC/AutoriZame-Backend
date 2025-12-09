@@ -63,5 +63,12 @@ public class EmpresaRepartidoraRepositoryEnMemoria implements EmpresaRepository 
 		return Optional.empty();
 		
 	}
+
+	@Override
+	public void borrarEmpresa(Long id) {
+		
+		empresas.remove(id);
+		
+	}
 	
 }
