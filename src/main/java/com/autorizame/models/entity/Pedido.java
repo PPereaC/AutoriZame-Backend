@@ -11,11 +11,13 @@ public class Pedido {
     private String direccion;
     private String estado;
     private LocalDateTime fechaAlta;
+    private Long repartidorId;
+    private String nombreAutorizado;
     
     public Pedido() {}
     
 	public Pedido(Long id, Long clienteId, Long autorizadoId, String descripcion, String direccion, String estado,
-			LocalDateTime fechaAlta) {
+			LocalDateTime fechaAlta, Long repartidorId, String nombreAutorizado) {
 		this.id = id;
 		this.clienteId = clienteId;
 		this.autorizadoId = autorizadoId;
@@ -23,6 +25,7 @@ public class Pedido {
 		this.direccion = direccion;
 		this.estado = estado;
 		this.fechaAlta = fechaAlta;
+		this.repartidorId = repartidorId;
 	}
 	
 	// Getters y Setters
@@ -81,6 +84,22 @@ public class Pedido {
 
 	public void setFechaAlta(LocalDateTime fechaAlta) {
 		this.fechaAlta = fechaAlta;
+	}
+
+	public Long getRepartidorId() {
+		return repartidorId;
+	}
+
+	public void setRepartidorId(Long repartidorId) {
+		this.repartidorId = repartidorId;
+	}
+
+	public String getNombreAutorizado() {
+		return nombreAutorizado;
+	}
+
+	public void setNombreAutorizado(String nombreAutorizado) {
+		this.nombreAutorizado = nombreAutorizado;
 	}
     
 }

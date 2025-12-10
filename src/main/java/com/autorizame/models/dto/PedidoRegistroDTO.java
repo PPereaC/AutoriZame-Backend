@@ -13,13 +13,16 @@ public class PedidoRegistroDTO {
 
     @NotBlank(message = "La dirección de recogida es obligatoria")
     private String direccion;
+    
+    private String nombreAutorizado;
 
     public PedidoRegistroDTO() {}
 
-	public PedidoRegistroDTO(String descripcion, Long autorizadoId, String direccion) {
+	public PedidoRegistroDTO(String descripcion, Long autorizadoId, String direccion, String nombreAutorizado) {
 		this.descripcion = descripcion;
 		this.autorizadoId = autorizadoId;
 		this.direccion = direccion;
+		this.nombreAutorizado = nombreAutorizado;
 	}
 
 	// Getters y Setters
@@ -47,5 +50,13 @@ public class PedidoRegistroDTO {
 	public void setDireccion(String direccion) {
 		this.direccion = direccion;
 	}
-    
+
+	public String getNombreAutorizado() {
+		return nombreAutorizado;
+	}
+
+	public void setNombreAutorizado(String nombreAutorizado) {
+		this.nombreAutorizado = nombreAutorizado;
+	}
+	
 }

@@ -4,10 +4,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.autorizame.models.dto.AsignarRepartidorDTO;
 import com.autorizame.models.dto.PedidoRegistroDTO;
 import com.autorizame.models.dto.PedidoResponseDTO;
 import com.autorizame.services.PedidoService;
@@ -34,5 +36,17 @@ public class PedidosController {
 
 		return new ResponseEntity<>(nuevoPedido, HttpStatus.CREATED);
 	}
+	
+	// Endpoint para asignar un repartidor a un pedido
+    @PutMapping("/empresas/{empresaId}/pedidos/{pedidoId}/asignar")
+    public ResponseEntity<PedidoResponseDTO> asignarRepartidor(
+            @PathVariable Long empresaId,
+            @PathVariable Long pedidoId,
+            @Valid @RequestBody AsignarRepartidorDTO dto) {
+
+        PedidoResponseDTO pedidoActualizado = pedidoService.asignarRepartidor(empresaId, pedidoId, dto);
+
+        return ResponseEntity.ok(pedidoActualizado);
+    }
 
 }
