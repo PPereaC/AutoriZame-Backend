@@ -62,4 +62,16 @@ public class RepartidoresRepositoryEnMemoria implements RepartidoresRepository {
 		return repartidoresEncontrados;
 	}
 
+	@Override
+	public Optional<Repartidor> buscarPorID(Long id) {
+		
+		for (Repartidor r : repartidores.values()) {
+			if(r.getId().equals(id)) {
+				return Optional.of(r);
+			}
+		}
+		
+		return Optional.empty();
+	}
+
 }

@@ -2,12 +2,15 @@ package com.autorizame.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import com.autorizame.exception.EmailDuplicadoException;
+import com.autorizame.exception.EmpresaDuplicadaException;
 import com.autorizame.exception.RecursoNoEncontradoException;
 import com.autorizame.models.dto.ListarRepartidoresEmpresaDTO;
+import com.autorizame.models.dto.RepartidorActualizacionDTO;
 import com.autorizame.models.dto.RepartidorRegistroDTO;
 import com.autorizame.models.dto.RepartidorResponseDTO;
 import com.autorizame.models.entity.Repartidor;
@@ -79,6 +82,37 @@ public class RepartidorService {
 		
 		return repartidoresRespuesta;
 		
+	}
+	
+	public RepartidorResponseDTO modificarRepartidor(Long id, RepartidorActualizacionDTO dto) {
+	    
+	    Repartidor repartidorExistente = repartidorRepository.buscarPorID(id)
+	            .orElseThrow(() -> new RecursoNoEncontradoException("No existe el reparidor con id " + id));
+
+	    Optional<Repartidor> coincidencia = repartidorRepository.buscarPorCorreo(dto.getCorreo());
+	    
+	    if (coincidencia.isPresent()) {
+	        if (!coincidencia.get().getId().equals(id)) {
+	            throw new EmpresaDuplicadaException(
+	                "El correo " + dto.getCorreo() + " ya está en uso por otro repartidor."
+	            );
+	        }
+	    }
+	                    
+	    repartidorExistente.setCorreo(dto.getCorreo());
+	    repartidorExistente.setTelefono(dto.getTelefono());
+	                    
+	    Repartidor repartidorGuardado = repartidorRepository.guardar(repartidorExistente);
+	                    
+	    RepartidorResponseDTO respuesta = new RepartidorResponseDTO();
+	    respuesta.setId(repartidorGuardado.getId());
+	    respuesta.setNombre(repartidorGuardado.getNombre());
+	    respuesta.setCorreo(repartidorGuardado.getCorreo());
+	    respuesta.setTelefono(repartidorGuardado.getTelefono());
+	    respuesta.setEstado(repartidorGuardado.getEstado());
+	    respuesta.setEmpresaId(repartidorGuardado.getEmpresaId());
+	            
+	    return respuesta;
 	}
 	
 }

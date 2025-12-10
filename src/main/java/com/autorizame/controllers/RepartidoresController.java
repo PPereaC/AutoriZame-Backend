@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.autorizame.models.dto.ClienteRegistroDTO;
 import com.autorizame.models.dto.ClienteResponseDTO;
 import com.autorizame.models.dto.ListarRepartidoresEmpresaDTO;
+import com.autorizame.models.dto.RepartidorActualizacionDTO;
 import com.autorizame.models.dto.RepartidorRegistroDTO;
 import com.autorizame.models.dto.RepartidorResponseDTO;
 import com.autorizame.services.RepartidorService;
@@ -47,6 +49,18 @@ public class RepartidoresController {
 		List<ListarRepartidoresEmpresaDTO> listaRespuesta = repartidorService.listarRepartidoresPorEmpresa(idEmpresa);
 		
 		return new ResponseEntity<>(listaRespuesta, HttpStatus.OK);
+		
+	}
+	
+	// Endpoint para actualizar el correo y telefono de un repartidor
+	@PutMapping("/{idEmpresa}/repartidores/{idRepartidor}")
+	public ResponseEntity<RepartidorResponseDTO> modificarRepartidor(
+			@PathVariable Long idEmpresa, @PathVariable Long idRepartidor,
+			@Valid @RequestBody RepartidorActualizacionDTO dto) {
+		
+		RepartidorResponseDTO respuesta = repartidorService.modificarRepartidor(idRepartidor, dto);
+		
+		return new ResponseEntity<>(respuesta, HttpStatus.OK);
 		
 	}
 	
