@@ -11,5 +11,6 @@ public interface RepartidoresRepository {
 	Optional<Repartidor> buscarPorCorreo(String correo);
 	List<Repartidor> listarRepartidoresPorEmpresa(Long id);
 	Optional<Repartidor> buscarPorID(Long id);
+	void eliminarRepartidor(Long id);
 	
 }

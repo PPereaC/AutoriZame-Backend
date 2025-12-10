@@ -115,4 +115,14 @@ public class RepartidorService {
 	    return respuesta;
 	}
 	
+	public void eliminarRepartidor(Long id) {
+		
+		if(!repartidorRepository.buscarPorID(id).isPresent()) {
+			throw new RecursoNoEncontradoException("El repartidor con id " + id + " no existe en el sistema");
+		}
+		
+		repartidorRepository.eliminarRepartidor(id);
+		
+	}
+	
 }

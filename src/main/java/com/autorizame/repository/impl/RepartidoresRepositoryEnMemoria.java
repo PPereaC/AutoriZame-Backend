@@ -74,4 +74,11 @@ public class RepartidoresRepositoryEnMemoria implements RepartidoresRepository {
 		return Optional.empty();
 	}
 
+	@Override
+	public void eliminarRepartidor(Long id) {
+		
+		repartidores.remove(id);
+		
+	}
+
 }
