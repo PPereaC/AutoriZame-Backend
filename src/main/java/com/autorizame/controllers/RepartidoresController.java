@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.autorizame.models.dto.ClienteRegistroDTO;
-import com.autorizame.models.dto.ClienteResponseDTO;
 import com.autorizame.models.dto.ListarRepartidoresEmpresaDTO;
 import com.autorizame.models.dto.RepartidorActualizacionDTO;
 import com.autorizame.models.dto.RepartidorRegistroDTO;
