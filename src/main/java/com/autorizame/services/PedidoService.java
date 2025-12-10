@@ -1,6 +1,8 @@
 package com.autorizame.services;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
@@ -121,6 +123,39 @@ public class PedidoService {
         respuesta.setNombreAutorizado(pedidoGuardado.getNombreAutorizado());
         
         return respuesta;
+    }
+    
+    public List<PedidoResponseDTO> listarPedidosPorCliente(Long clienteId) {
+    	
+    	// Validar que el cliente existe
+    	if(!clienteRepository.buscarPorID(clienteId).isPresent()) {
+    		throw new RecursoNoEncontradoException("El cliente con id " + clienteId + " no existe");
+    	}
+    	
+    	// Obtener los pedidos
+    	List<Pedido> pedidos = pedidoRepository.obtenerTodos();
+
+    	List<PedidoResponseDTO> listaRespuesta = new ArrayList<>();
+    	
+    	// Coger solo los pedidos de este cliente
+    	for (Pedido p : pedidos) {
+			if(p.getClienteId().equals(clienteId)) {
+				PedidoResponseDTO respuesta = new PedidoResponseDTO();
+				respuesta.setId(p.getId());
+				respuesta.setAutorizadoId(p.getAutorizadoId());
+				respuesta.setClienteId(p.getClienteId());
+				respuesta.setDescripcion(p.getDescripcion());
+				respuesta.setDireccion(p.getDireccion());
+				respuesta.setEstado(p.getEstado());
+				respuesta.setFechaAlta(p.getFechaAlta());
+				respuesta.setNombreAutorizado(p.getNombreAutorizado());
+				
+				listaRespuesta.add(respuesta);
+			}
+		}
+    	
+    	return listaRespuesta;
+    	
     }
     
 }

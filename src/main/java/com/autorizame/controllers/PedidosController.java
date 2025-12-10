@@ -1,7 +1,10 @@
 package com.autorizame.controllers;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -46,7 +49,17 @@ public class PedidosController {
 
         PedidoResponseDTO pedidoActualizado = pedidoService.asignarRepartidor(empresaId, pedidoId, dto);
 
-        return ResponseEntity.ok(pedidoActualizado);
+        return new ResponseEntity<>(pedidoActualizado, HttpStatus.OK);
+    }
+    
+    // Endpoint para obtener todos los pedidos de un cliente
+    @GetMapping("/clientes/{clienteId}/pedidos")
+    public ResponseEntity<List<PedidoResponseDTO>> listarPedidosPorCliente(@PathVariable Long clienteId) {
+    	
+    	List<PedidoResponseDTO> respuesta = pedidoService.listarPedidosPorCliente(clienteId);
+    	
+    	return new ResponseEntity<>(respuesta, HttpStatus.OK);
+    	
     }
 
 }
