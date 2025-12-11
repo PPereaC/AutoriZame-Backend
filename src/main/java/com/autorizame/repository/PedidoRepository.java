@@ -11,5 +11,6 @@ public interface PedidoRepository {
 	Optional<Pedido> buscarPorID(Long id);
 	List<Pedido> buscarPorClienteId(Long clienteId);
 	List<Pedido> obtenerTodos();
-
+	void eliminar(Long id);
+	
 }

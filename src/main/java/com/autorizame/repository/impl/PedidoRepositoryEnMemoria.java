@@ -55,4 +55,11 @@ public class PedidoRepositoryEnMemoria implements PedidoRepository {
 		return new ArrayList<>(pedidos.values());
 	}
 
+	@Override
+	public void eliminar(Long id) {
+		
+		pedidos.remove(id);
+		
+	}
+
 }

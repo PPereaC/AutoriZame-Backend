@@ -204,4 +204,24 @@ public class PedidoService {
         
     }
     
+    public void cancelarPedido(Long clienteId, Long pedidoId) {
+
+    	// Buscar el pedido
+        Optional<Pedido> pedido = pedidoRepository.buscarPorID(pedidoId);
+
+        // El usuario que intenta cancelarlo es el dueño del pedido??
+        if (!pedido.get().getClienteId().equals(clienteId)) {
+            throw new DatosUsuarioNoCoincidenException("Error: No puedes cancelar un pedido que no es tuyo.");
+        }
+
+        // Solo borrar si está como "PENDIENTE"
+        if (!"PENDIENTE".equalsIgnoreCase(pedido.get().getEstado())) {
+            throw new IllegalStateException("No se puede cancelar el pedido porque ya está en proceso o entregado.");
+        }
+
+        // Eliminar pedido
+        pedidoRepository.eliminar(pedidoId);
+        
+    }
+    
 }

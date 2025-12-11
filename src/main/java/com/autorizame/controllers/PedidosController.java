@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -72,6 +73,17 @@ public class PedidosController {
         PedidoResponseDTO pedidoActualizado = pedidoService.actualizarEstadoPedido(pedidoId, dto);
         
         return new ResponseEntity<>(pedidoActualizado, HttpStatus.OK);
+    }
+    
+    // Endpoint para cancelar un pedido con estado "PENDIENTE"
+    @DeleteMapping("/clientes/{clienteId}/pedidos/{pedidoId}")
+    public ResponseEntity<Void> cancelarPedido(
+            @PathVariable Long clienteId, 
+            @PathVariable Long pedidoId) {
+
+        pedidoService.cancelarPedido(clienteId, pedidoId);
+        
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }
