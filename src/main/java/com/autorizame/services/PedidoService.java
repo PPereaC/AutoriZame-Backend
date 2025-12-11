@@ -3,11 +3,13 @@ package com.autorizame.services;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import com.autorizame.exception.DatosUsuarioNoCoincidenException;
 import com.autorizame.exception.RecursoNoEncontradoException;
+import com.autorizame.models.dto.ActualizarEstadoPedidoDTO;
 import com.autorizame.models.dto.AsignarRepartidorDTO;
 import com.autorizame.models.dto.PedidoRegistroDTO;
 import com.autorizame.models.dto.PedidoResponseDTO;
@@ -156,6 +158,50 @@ public class PedidoService {
     	
     	return listaRespuesta;
     	
+    }
+    
+    
+    public PedidoResponseDTO actualizarEstadoPedido(Long pedidoId, ActualizarEstadoPedidoDTO dto) {
+
+    	Optional<Pedido> pedido = pedidoRepository.buscarPorID(pedidoId);
+    	
+        // Buscar el pedido
+        if(!pedido.isPresent()) {
+        	throw new RecursoNoEncontradoException("El pedido con id " + pedidoId + " no existe");
+        }
+
+        // El que intenta cambiar el estado es el repartidor asignado a este pedido??
+        if (pedido.get().getRepartidorId() == null || !pedido.get().getRepartidorId().equals(dto.getRepartidorId())) {
+            throw new DatosUsuarioNoCoincidenException("Error: No tienes permiso para modificar este pedido (o no está asignado a ti).");
+        }
+
+        // Validar el estado
+        String estadoLimpio = dto.getEstado().toUpperCase();
+        
+        if (!estadoLimpio.equals("PENDIENTE") && 
+            !estadoLimpio.equals("EN_REPARTO") && 
+            !estadoLimpio.equals("ENTREGADO")) {
+            throw new IllegalArgumentException("Estado no válido. Solo se permite: PENDIENTE, EN_REPARTO, ENTREGADO.");
+        }
+
+        // Actualizar estado
+        pedido.get().setEstado(estadoLimpio);
+        Pedido pedidoGuardado = pedidoRepository.guardar(pedido.get());
+
+        Autorizado autorizado = autorizadoRepository.buscarPorID(pedido.get().getAutorizadoId()).orElse(null);
+        
+        PedidoResponseDTO respuesta = new PedidoResponseDTO();
+        respuesta.setId(pedidoGuardado.getId());
+        respuesta.setAutorizadoId(pedidoGuardado.getAutorizadoId());
+        respuesta.setClienteId(pedidoGuardado.getClienteId());
+        respuesta.setDescripcion(pedidoGuardado.getDescripcion());
+        respuesta.setDireccion(pedidoGuardado.getDireccion());
+        respuesta.setEstado(pedidoGuardado.getEstado());
+        respuesta.setFechaAlta(pedidoGuardado.getFechaAlta());
+        respuesta.setNombreAutorizado(autorizado.getNombre());
+        
+        return respuesta;
+        
     }
     
 }

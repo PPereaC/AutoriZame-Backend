@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.autorizame.models.dto.ActualizarEstadoPedidoDTO;
 import com.autorizame.models.dto.AsignarRepartidorDTO;
 import com.autorizame.models.dto.PedidoRegistroDTO;
 import com.autorizame.models.dto.PedidoResponseDTO;
@@ -60,6 +61,17 @@ public class PedidosController {
     	
     	return new ResponseEntity<>(respuesta, HttpStatus.OK);
     	
+    }
+    
+    // Endpoint para actualizar el estado de un pedido (repartidor)
+    @PutMapping("/pedidos/{pedidoId}/estado")
+    public ResponseEntity<PedidoResponseDTO> actualizarEstado(
+            @PathVariable Long pedidoId,
+            @Valid @RequestBody ActualizarEstadoPedidoDTO dto) {
+
+        PedidoResponseDTO pedidoActualizado = pedidoService.actualizarEstadoPedido(pedidoId, dto);
+        
+        return new ResponseEntity<>(pedidoActualizado, HttpStatus.OK);
     }
 
 }
