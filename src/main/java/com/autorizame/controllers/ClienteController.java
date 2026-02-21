@@ -1,6 +1,7 @@
 package com.autorizame.controllers;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
@@ -38,6 +39,13 @@ public class ClienteController {
 		
 		// Se devuelve el objeto creado y el código HTTP 201 CREATED
 		return new ResponseEntity<>(nuevoCliente, HttpStatus.CREATED);
+	}
+	
+	// Listar todos los clientes
+	@GetMapping
+	public ResponseEntity<List<ClienteResponseDTO>> listarTodos() {
+		List<ClienteResponseDTO> clientes = clienteService.listarTodos();
+		return new ResponseEntity<>(clientes, HttpStatus.OK);
 	}
 	
 	// Obtener un usuario mediante su ID
