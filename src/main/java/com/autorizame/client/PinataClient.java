@@ -1,5 +1,6 @@
 package com.autorizame.client;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
@@ -10,9 +11,9 @@ public class PinataClient {
 
     private final RestClient restClient;
 
-    public PinataClient() {
+    public PinataClient(@Value("${microservicios.pinata.url}") String pinataUrl) {
         this.restClient = RestClient.builder()
-                .baseUrl("http://localhost:3001")
+                .baseUrl(pinataUrl)
                 .build();
     }
 
