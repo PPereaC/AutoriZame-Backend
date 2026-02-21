@@ -1,7 +1,9 @@
 package com.autorizame.services;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -62,15 +64,24 @@ public class ClienteService {
 			);
 		}
 
+		return convertirAResponseDTO(clienteEncontrado.get());
+	}
+	
+	// Listar todos los clientes
+	public List<ClienteResponseDTO> listarTodos() {
+		return clienteRepository.findAll().stream()
+			.map(this::convertirAResponseDTO)
+			.collect(Collectors.toList());
+	}
+	
+	private ClienteResponseDTO convertirAResponseDTO(Cliente cliente) {
 		ClienteResponseDTO respuesta = new ClienteResponseDTO();
-		respuesta.setId(clienteEncontrado.get().getId());
-		respuesta.setNombre(clienteEncontrado.get().getNombre());
-		respuesta.setEmail(clienteEncontrado.get().getEmail());
-		respuesta.setDireccionEthereum(clienteEncontrado.get().getDireccionEthereum());
-		respuesta.setFechaRegistro(clienteEncontrado.get().getFechaRegistro());
-		
+		respuesta.setId(cliente.getId());
+		respuesta.setNombre(cliente.getNombre());
+		respuesta.setEmail(cliente.getEmail());
+		respuesta.setDireccionEthereum(cliente.getDireccionEthereum());
+		respuesta.setFechaRegistro(cliente.getFechaRegistro());
 		return respuesta;
-		
 	}
 	
 	public ClienteResponseDTO actualizarCliente(Long id, ClienteRegistroDTO dto) {
