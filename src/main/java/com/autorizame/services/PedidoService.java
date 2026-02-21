@@ -44,7 +44,7 @@ public class PedidoService {
     public PedidoResponseDTO crearPedido(Long clienteId, PedidoRegistroDTO dto) {
 
         // Validar que el Cliente existe
-        if (!clienteRepository.buscarPorID(clienteId).isPresent()) {
+        if (!clienteRepository.findById(clienteId).isPresent()) {
             throw new RecursoNoEncontradoException("Cliente no encontrado");
         }
 
@@ -130,7 +130,7 @@ public class PedidoService {
     public List<PedidoResponseDTO> listarPedidosPorCliente(Long clienteId) {
     	
     	// Validar que el cliente existe
-    	if(!clienteRepository.buscarPorID(clienteId).isPresent()) {
+    	if(!clienteRepository.findById(clienteId).isPresent()) {
     		throw new RecursoNoEncontradoException("El cliente con id " + clienteId + " no existe");
     	}
     	

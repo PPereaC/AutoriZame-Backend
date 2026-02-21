@@ -25,7 +25,7 @@ public class ClienteService {
 	public ClienteResponseDTO registrarCliente(ClienteRegistroDTO dto) {
 		
 		// Comprobar si el email existe
-		if (clienteRepository.buscarPorEmail(dto.getEmail()).isPresent()) {
+		if (clienteRepository.findByEmail(dto.getEmail()).isPresent()) {
 			throw new EmailDuplicadoException("El correo " + dto.getEmail() + " ya está registrado en el sistema.");
 		}
 		
@@ -39,7 +39,7 @@ public class ClienteService {
 		nuevoCliente.setFechaRegistro(LocalDateTime.now());
 		
 		// Guardar cliente en el repositorio
-		Cliente clienteGuardado = clienteRepository.guardar(nuevoCliente);
+		Cliente clienteGuardado = clienteRepository.save(nuevoCliente);
 		
 		ClienteResponseDTO respuesta = new ClienteResponseDTO();
 		
@@ -55,7 +55,7 @@ public class ClienteService {
 	
 	public ClienteResponseDTO buscarPorID(Long id) {
 		
-		Optional<Cliente> clienteEncontrado = clienteRepository.buscarPorID(id);
+		Optional<Cliente> clienteEncontrado = clienteRepository.findById(id);
 		if(!clienteEncontrado.isPresent()) {
 			throw new RecursoNoEncontradoException(
 					"El usuario con el id [" + id + "] no está registrado"
@@ -75,14 +75,14 @@ public class ClienteService {
 	
 	public ClienteResponseDTO actualizarCliente(Long id, ClienteRegistroDTO dto) {
 		
-		Cliente clienteExistente = clienteRepository.buscarPorID(id).orElseThrow(
+		Cliente clienteExistente = clienteRepository.findById(id).orElseThrow(
 				() -> new RecursoNoEncontradoException(
 						"El usuario con el id [" + id + "] no está registrado"
 		));
 		
 		
 		// Validar email, para que no haya otro usuario con ese correo electrónico
-		Optional<Cliente> otroClienteConEseEmail = clienteRepository.buscarPorEmail(dto.getEmail());
+		Optional<Cliente> otroClienteConEseEmail = clienteRepository.findByEmail(dto.getEmail());
 		if(otroClienteConEseEmail.isPresent()) {
 			if(!otroClienteConEseEmail.get().getId().equals(id)) {
 				throw new DatosUsuarioNoCoincidenException(
@@ -98,7 +98,7 @@ public class ClienteService {
 	    clienteExistente.setDireccionEthereum(dto.getDireccionEthereum());
 	    
 	    // Guardar el nuevo cliente
-	    Cliente clienteGuardado = clienteRepository.guardar(clienteExistente);
+	    Cliente clienteGuardado = clienteRepository.save(clienteExistente);
 	    
 	    // Respuesta que se manda en la llamada a la API con los datos actualizados del usuario
 	    ClienteResponseDTO respuesta = new ClienteResponseDTO();
@@ -115,11 +115,11 @@ public class ClienteService {
 	// Método para eliminar un usuario del sistema
 	public void eliminarCliente(Long id) {
 		
-		if(!clienteRepository.buscarPorID(id).isPresent()) {
+		if(!clienteRepository.findById(id).isPresent()) {
 			throw new RecursoNoEncontradoException("No se puede eliminar. El usuario con id " + id + " no existe.");
 		}
 		
-		clienteRepository.borrarClientePorID(id);
+		clienteRepository.deleteById(id);
 		
 		// TODO: Quedaría mandar el correo pero no puedo ahora mismo
 		

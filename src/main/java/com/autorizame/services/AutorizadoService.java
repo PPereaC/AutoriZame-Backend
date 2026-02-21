@@ -31,7 +31,7 @@ public class AutorizadoService {
 	public AutorizadoResponseDTO crearAutorizado(Long clienteID, AutorizadoRegistroDTO dto) {
 		
 		// Validar que exista el ID del cliente
-		if(!clienteRepository.buscarPorID(clienteID).isPresent()) {
+		if(!clienteRepository.findById(clienteID).isPresent()) {
 			throw new RecursoNoEncontradoException(
 					"El cliente con el id [" + clienteID + "] no está registrado"
 			);
@@ -72,7 +72,7 @@ public class AutorizadoService {
 	
 	public List<ListarAutorizadosDTO> listarAutorizados(Long clienteId) {
 		
-		if(!clienteRepository.buscarPorID(clienteId).isPresent()) {
+		if(!clienteRepository.findById(clienteId).isPresent()) {
 			throw new RecursoNoEncontradoException("El cliente con id [" + clienteId + "] no existe");
 		}
 		
@@ -98,7 +98,7 @@ public class AutorizadoService {
 	public AutorizadoResponseDTO actualizarDatosAutorizado(Long clienteId, String dni, AutorizadoRegistroDTO dto) {
 		
 		// Comprobar que exista el cliente
-		if(!clienteRepository.buscarPorID(clienteId).isPresent()) {
+		if(!clienteRepository.findById(clienteId).isPresent()) {
 			throw new RecursoNoEncontradoException("El cliente con id [" + clienteId + "] no existe");
 		}
 		
