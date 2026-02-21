@@ -26,6 +26,8 @@ public class ClienteService {
 	
 	public ClienteResponseDTO registrarCliente(ClienteRegistroDTO dto) {
 		
+		System.out.println("[CLIENTE-SERVICE] Iniciando registro de cliente: " + dto.getEmail());
+		
 		// Comprobar si el email existe
 		if (clienteRepository.findByEmail(dto.getEmail()).isPresent()) {
 			throw new EmailDuplicadoException("El correo " + dto.getEmail() + " ya está registrado en el sistema.");
@@ -42,6 +44,7 @@ public class ClienteService {
 		
 		// Guardar cliente en el repositorio
 		Cliente clienteGuardado = clienteRepository.save(nuevoCliente);
+		System.out.println("[CLIENTE-SERVICE] Cliente guardado en BD con ID: " + clienteGuardado.getId());
 		
 		ClienteResponseDTO respuesta = new ClienteResponseDTO();
 		
@@ -51,6 +54,7 @@ public class ClienteService {
 		respuesta.setDireccionEthereum(clienteGuardado.getDireccionEthereum());
 		respuesta.setFechaRegistro(clienteGuardado.getFechaRegistro());
         
+		System.out.println("[CLIENTE-SERVICE] Registro completado exitosamente");
 		return respuesta;
 		
 	}
@@ -69,7 +73,10 @@ public class ClienteService {
 	
 	// Listar todos los clientes
 	public List<ClienteResponseDTO> listarTodos() {
-		return clienteRepository.findAll().stream()
+		System.out.println("[CLIENTE-SERVICE] Consultando todos los clientes en BD");
+		List<Cliente> clientes = clienteRepository.findAll();
+		System.out.println("[CLIENTE-SERVICE] Total de clientes encontrados: " + clientes.size());
+		return clientes.stream()
 			.map(this::convertirAResponseDTO)
 			.collect(Collectors.toList());
 	}
@@ -126,11 +133,14 @@ public class ClienteService {
 	// Método para eliminar un usuario del sistema
 	public void eliminarCliente(Long id) {
 		
+		System.out.println("[CLIENTE-SERVICE] Solicitando eliminación de cliente ID: " + id);
+		
 		if(!clienteRepository.findById(id).isPresent()) {
 			throw new RecursoNoEncontradoException("No se puede eliminar. El usuario con id " + id + " no existe.");
 		}
 		
 		clienteRepository.deleteById(id);
+		System.out.println("[CLIENTE-SERVICE] Cliente ID " + id + " eliminado de la BD");
 		
 		// TODO: Quedaría mandar el correo pero no puedo ahora mismo
 		

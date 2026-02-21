@@ -24,11 +24,14 @@ public class PinataClient {
     */
     @SuppressWarnings("unchecked")
     public Map<String, Object> subirMetadata(Map<String, Object> datosPedido) {
-        return restClient.post()
+        System.out.println("[PINATA-CLIENT] Enviando metadata a IPFS: " + datosPedido);
+        Map<String, Object> respuesta = restClient.post()
                 .uri("/subirMetadata")
                 .body(datosPedido)
                 .retrieve()
                 .body(Map.class);
+        System.out.println("[PINATA-CLIENT] Respuesta recibida: " + respuesta);
+        return respuesta;
     }
 
     /**
@@ -38,9 +41,12 @@ public class PinataClient {
     */
     @SuppressWarnings("unchecked")
     public Map<String, Object> recuperarMetadata(String cid) {
-        return restClient.get()
+        System.out.println("[PINATA-CLIENT] Recuperando metadata con CID: " + cid);
+        Map<String, Object> respuesta = restClient.get()
                 .uri("/recuperarMetadata/{cid}", cid)
                 .retrieve()
                 .body(Map.class);
+        System.out.println("[PINATA-CLIENT] Metadata recuperada: " + respuesta);
+        return respuesta;
     }
 }

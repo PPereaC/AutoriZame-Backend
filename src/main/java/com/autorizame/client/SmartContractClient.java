@@ -37,11 +37,14 @@ public class SmartContractClient {
                 "rutaDatos", rutaDatos
         );
 
-        return restClient.post()
+        System.out.println("[SMART-CONTRACT-CLIENT] Minteando NFT con datos: " + requestBody);
+        Map<String, Object> respuesta = restClient.post()
                 .uri("/mintarAutorizacion")
                 .body(requestBody)
                 .retrieve()
                 .body(Map.class);
+        System.out.println("[SMART-CONTRACT-CLIENT] Respuesta mintado: " + respuesta);
+        return respuesta;
     }
 
     /**
@@ -57,10 +60,13 @@ public class SmartContractClient {
                 "nuevoDestinatario", nuevoDestinatario
         );
 
-        return restClient.post()
+        System.out.println("[SMART-CONTRACT-CLIENT] Transfiriendo token " + idToken + " a " + nuevoDestinatario);
+        Map<String, Object> respuesta = restClient.post()
                 .uri("/transferirAutorizacion")
                 .body(requestBody)
                 .retrieve()
                 .body(Map.class);
+        System.out.println("[SMART-CONTRACT-CLIENT] Respuesta transferencia: " + respuesta);
+        return respuesta;
     }
 }
