@@ -2,12 +2,11 @@ package com.autorizame.repository;
 
 import java.util.Optional;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+
 import com.autorizame.models.entity.Cliente;
 
-public interface ClienteRepository {
+public interface ClienteRepository extends JpaRepository<Cliente, Long> {
 
-	Cliente guardar(Cliente cliente);
-	Optional<Cliente> buscarPorEmail(String email);
-	Optional<Cliente> buscarPorID(Long id);
-	void borrarClientePorID(Long id);
+	Optional<Cliente> findByEmail(String email);
 }
