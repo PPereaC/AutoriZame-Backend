@@ -1,5 +1,6 @@
 package com.autorizame.client;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
@@ -10,9 +11,9 @@ public class SmartContractClient {
 
     private final RestClient restClient;
 
-    public SmartContractClient() {
+    public SmartContractClient(@Value("${microservicios.smartcontract.url}") String smartContractUrl) {
         this.restClient = RestClient.builder()
-                .baseUrl("http://localhost:3002")
+                .baseUrl(smartContractUrl)
                 .build();
     }
 
