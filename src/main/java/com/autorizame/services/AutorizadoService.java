@@ -37,7 +37,7 @@ public class AutorizadoService {
 			);
 		}
 
-		Optional<Autorizado> duplicado = autorizadoRepository.buscarPorClienteIdYDni(clienteID, dto.getDni());
+		Optional<Autorizado> duplicado = autorizadoRepository.findByClienteIdAndDniIgnoreCase(clienteID, dto.getDni());
 
 		if (duplicado.isPresent()) {
 		    throw new AutorizadoDuplicadoException("Esta persona ya está autorizada por el usuario");
@@ -54,7 +54,7 @@ public class AutorizadoService {
 		nuevoAutorizado.setFechaRegistro(LocalDateTime.now());
 		
 		// Guardar autorizado en el repositorio
-		Autorizado autorizadoGuardado = autorizadoRepository.guardar(nuevoAutorizado);
+		Autorizado autorizadoGuardado = autorizadoRepository.save(nuevoAutorizado);
 		
 		AutorizadoResponseDTO respuesta = new AutorizadoResponseDTO();
 		
@@ -76,7 +76,7 @@ public class AutorizadoService {
 			throw new RecursoNoEncontradoException("El cliente con id [" + clienteId + "] no existe");
 		}
 		
-		List<Autorizado> autorizadosEntidad = autorizadoRepository.buscarPorIDCliente(clienteId);
+		List<Autorizado> autorizadosEntidad = autorizadoRepository.findByClienteId(clienteId);
 		List<ListarAutorizadosDTO> listaRespuesta = new ArrayList<>();
 		
 		for (Autorizado autorizado : autorizadosEntidad) {
@@ -103,18 +103,18 @@ public class AutorizadoService {
 		}
 		
 		// Comprobar que exista un autorizado con ese clienteId y ese DNI
-		if(!autorizadoRepository.buscarPorClienteIdYDni(clienteId, dni).isPresent()) {
+		if(!autorizadoRepository.findByClienteIdAndDniIgnoreCase(clienteId, dni).isPresent()) {
 			throw new DatosUsuarioNoCoincidenException("No hay ningun autorizado con dni " + dni +
 					" asociado al cliente con id " + clienteId);
 		}
 		
-		Optional<Autorizado> autorizadoExistente = autorizadoRepository.buscarPorDni(dni);
+		Optional<Autorizado> autorizadoExistente = autorizadoRepository.findByDni(dni);
 		autorizadoExistente.get().setNombre(dto.getNombre());
 		autorizadoExistente.get().setTelefono(dto.getTelefono());
 		autorizadoExistente.get().setDireccionEthereum(dto.getDireccionEthereum());
 
 
-		Autorizado autorizadoGuardado = autorizadoRepository.guardar(autorizadoExistente.get());
+		Autorizado autorizadoGuardado = autorizadoRepository.save(autorizadoExistente.get());
 		
 		AutorizadoResponseDTO respuesta = new AutorizadoResponseDTO();
 		respuesta.setNombre(autorizadoGuardado.getNombre());
@@ -131,12 +131,11 @@ public class AutorizadoService {
 	
 	public void eliminarAutorizado(Long clienteID, String dni) {
 		
-		if(!autorizadoRepository.buscarPorClienteIdYDni(clienteID, dni).isPresent()) {
-			throw new RecursoNoEncontradoException("No existe un autorizado con clienteID ["
-					+ clienteID + "] y dni " + dni);
-		}
+		Autorizado autorizado = autorizadoRepository.findByClienteIdAndDniIgnoreCase(clienteID, dni)
+				.orElseThrow(() -> new RecursoNoEncontradoException("No existe un autorizado con clienteID ["
+						+ clienteID + "] y dni " + dni));
 		
-		autorizadoRepository.borrarAutorizado(clienteID, dni);
+		autorizadoRepository.deleteById(autorizado.getId());
 		
 	}
 	

@@ -2,14 +2,37 @@ package com.autorizame.models.entity;
 
 import java.time.LocalDateTime;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "autorizados")
 public class Autorizado {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
+	@Column(nullable = false, length = 100)
 	private String nombre;
+
+	@Column(nullable = false, unique = true, length = 20)
 	private String dni;
+
+	@Column(name = "direccion_ethereum", length = 100)
 	private String direccionEthereum;
+
+	@Column(length = 20)
 	private String telefono;
+
+	@Column(name = "fecha_registro")
 	private LocalDateTime fechaRegistro;
+
+	@Column(name = "cliente_id", nullable = false)
 	private Long clienteId;
 	
 	public Autorizado() {}

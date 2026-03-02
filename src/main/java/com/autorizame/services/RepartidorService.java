@@ -31,12 +31,12 @@ public class RepartidorService {
 	public RepartidorResponseDTO registrarRepartidor(Long idEmpresa, RepartidorRegistroDTO dto) {
 		
 		// Comprobar si el email existe
-		if (repartidorRepository.buscarPorCorreo(dto.getCorreo()).isPresent()) {
+		if (repartidorRepository.findByCorreo(dto.getCorreo()).isPresent()) {
 			throw new EmailDuplicadoException("El correo " + dto.getCorreo() + " ya está registrado en el sistema.");
 		}
 		
 		// Comprobar si el id de la empresa existe
-		if(!empresaRepository.buscarPorID(idEmpresa).isPresent()) {
+		if(!empresaRepository.findById(idEmpresa).isPresent()) {
 			throw new RecursoNoEncontradoException("La empresa con id " + idEmpresa + " no existe en el sistema");
 		}
 		
@@ -50,7 +50,7 @@ public class RepartidorService {
 		nuevoRepartidor.setEmpresaId(idEmpresa);
 		
 		// Guardar repartidor en el repositorio
-		Repartidor repartidorGuardado = repartidorRepository.guardar(nuevoRepartidor);
+		Repartidor repartidorGuardado = repartidorRepository.save(nuevoRepartidor);
 		
 		RepartidorResponseDTO respuesta = new RepartidorResponseDTO();
 		
@@ -67,7 +67,7 @@ public class RepartidorService {
 	
 	public List<ListarRepartidoresEmpresaDTO> listarRepartidoresPorEmpresa(Long id) {
 		
-		List<Repartidor> repartidoresEncontrados = repartidorRepository.listarRepartidoresPorEmpresa(id);
+		List<Repartidor> repartidoresEncontrados = repartidorRepository.findByEmpresaId(id);
 		List<ListarRepartidoresEmpresaDTO> repartidoresRespuesta = new ArrayList<>();
 		
 		for (Repartidor r : repartidoresEncontrados) {
@@ -86,10 +86,10 @@ public class RepartidorService {
 	
 	public RepartidorResponseDTO modificarRepartidor(Long id, RepartidorActualizacionDTO dto) {
 	    
-	    Repartidor repartidorExistente = repartidorRepository.buscarPorID(id)
+	    Repartidor repartidorExistente = repartidorRepository.findById(id)
 	            .orElseThrow(() -> new RecursoNoEncontradoException("No existe el reparidor con id " + id));
 
-	    Optional<Repartidor> coincidencia = repartidorRepository.buscarPorCorreo(dto.getCorreo());
+	    Optional<Repartidor> coincidencia = repartidorRepository.findByCorreo(dto.getCorreo());
 	    
 	    if (coincidencia.isPresent()) {
 	        if (!coincidencia.get().getId().equals(id)) {
@@ -102,7 +102,7 @@ public class RepartidorService {
 	    repartidorExistente.setCorreo(dto.getCorreo());
 	    repartidorExistente.setTelefono(dto.getTelefono());
 	                    
-	    Repartidor repartidorGuardado = repartidorRepository.guardar(repartidorExistente);
+	    Repartidor repartidorGuardado = repartidorRepository.save(repartidorExistente);
 	                    
 	    RepartidorResponseDTO respuesta = new RepartidorResponseDTO();
 	    respuesta.setId(repartidorGuardado.getId());
@@ -117,11 +117,11 @@ public class RepartidorService {
 	
 	public void eliminarRepartidor(Long id) {
 		
-		if(!repartidorRepository.buscarPorID(id).isPresent()) {
+		if(!repartidorRepository.findById(id).isPresent()) {
 			throw new RecursoNoEncontradoException("El repartidor con id " + id + " no existe en el sistema");
 		}
 		
-		repartidorRepository.eliminarRepartidor(id);
+		repartidorRepository.deleteById(id);
 		
 	}
 	

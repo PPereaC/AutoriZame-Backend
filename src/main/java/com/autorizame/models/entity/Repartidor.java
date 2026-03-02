@@ -1,12 +1,33 @@
 package com.autorizame.models.entity;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "repartidores")
 public class Repartidor {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
+	@Column(nullable = false, length = 100)
 	private String nombre;
+
+	@Column(nullable = false, unique = true, length = 150)
 	private String correo;
+
+	@Column(length = 20)
 	private String telefono;
+
+	@Column(name = "empresa_id", nullable = false)
 	private Long empresaId;
+
+	@Column(nullable = false, length = 20)
 	private String estado;
 	
 	public Repartidor() {}

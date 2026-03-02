@@ -49,7 +49,7 @@ public class PedidoService {
         }
 
         // Validar autorizado
-        Autorizado autorizado = autorizadoRepository.buscarPorID(dto.getAutorizadoId())
+        Autorizado autorizado = autorizadoRepository.findById(dto.getAutorizadoId())
                 .orElseThrow(() -> new RecursoNoEncontradoException("El autorizado indicado no existe"));
 
         // Verificar Pertenencia
@@ -66,7 +66,7 @@ public class PedidoService {
         nuevoPedido.setFechaAlta(LocalDateTime.now());
         nuevoPedido.setNombreAutorizado(autorizado.getNombre());
 
-        Pedido pedidoGuardado = pedidoRepository.guardar(nuevoPedido);
+        Pedido pedidoGuardado = pedidoRepository.save(nuevoPedido);
 
         PedidoResponseDTO respuesta = new PedidoResponseDTO();
         
@@ -86,16 +86,16 @@ public class PedidoService {
     public PedidoResponseDTO asignarRepartidor(Long empresaId, Long pedidoId, AsignarRepartidorDTO dto) {
 
         // Validar que la Empresa existe
-        if (!empresaRepository.buscarPorID(empresaId).isPresent()) {
+        if (!empresaRepository.findById(empresaId).isPresent()) {
             throw new RecursoNoEncontradoException("Empresa con id " + empresaId + " no encontrada");
         }
 
         // Validar que el Pedido existe
-        Pedido pedido = pedidoRepository.buscarPorID(pedidoId)
+        Pedido pedido = pedidoRepository.findById(pedidoId)
                 .orElseThrow(() -> new RecursoNoEncontradoException("El pedido con id " + pedidoId + " no existe"));
 
         // Validar que el Repartidor existe
-        Repartidor repartidor = repartidorRepository.buscarPorID(dto.getRepartidorId())
+        Repartidor repartidor = repartidorRepository.findById(dto.getRepartidorId())
                 .orElseThrow(() -> new RecursoNoEncontradoException("El repartidor con id " + dto.getRepartidorId() + " no existe"));
         
         // El repartidor trabaja para esta empresa??
@@ -112,7 +112,7 @@ public class PedidoService {
         pedido.setRepartidorId(repartidor.getId());
         pedido.setEstado("EN_REPARTO");
         
-        Pedido pedidoGuardado = pedidoRepository.guardar(pedido);
+        Pedido pedidoGuardado = pedidoRepository.save(pedido);
         
         PedidoResponseDTO respuesta = new PedidoResponseDTO();
         respuesta.setId(pedidoGuardado.getId());
@@ -135,13 +135,12 @@ public class PedidoService {
     	}
     	
     	// Obtener los pedidos
-    	List<Pedido> pedidos = pedidoRepository.obtenerTodos();
+    	List<Pedido> pedidos = pedidoRepository.findByClienteId(clienteId);
 
     	List<PedidoResponseDTO> listaRespuesta = new ArrayList<>();
     	
     	// Coger solo los pedidos de este cliente
     	for (Pedido p : pedidos) {
-			if(p.getClienteId().equals(clienteId)) {
 				PedidoResponseDTO respuesta = new PedidoResponseDTO();
 				respuesta.setId(p.getId());
 				respuesta.setAutorizadoId(p.getAutorizadoId());
@@ -153,8 +152,7 @@ public class PedidoService {
 				respuesta.setNombreAutorizado(p.getNombreAutorizado());
 				
 				listaRespuesta.add(respuesta);
-			}
-		}
+    	}
     	
     	return listaRespuesta;
     	
@@ -163,7 +161,7 @@ public class PedidoService {
     
     public PedidoResponseDTO actualizarEstadoPedido(Long pedidoId, ActualizarEstadoPedidoDTO dto) {
 
-    	Optional<Pedido> pedido = pedidoRepository.buscarPorID(pedidoId);
+    	Optional<Pedido> pedido = pedidoRepository.findById(pedidoId);
     	
         // Buscar el pedido
         if(!pedido.isPresent()) {
@@ -186,9 +184,9 @@ public class PedidoService {
 
         // Actualizar estado
         pedido.get().setEstado(estadoLimpio);
-        Pedido pedidoGuardado = pedidoRepository.guardar(pedido.get());
+        Pedido pedidoGuardado = pedidoRepository.save(pedido.get());
 
-        Autorizado autorizado = autorizadoRepository.buscarPorID(pedido.get().getAutorizadoId()).orElse(null);
+        Autorizado autorizado = autorizadoRepository.findById(pedido.get().getAutorizadoId()).orElse(null);
         
         PedidoResponseDTO respuesta = new PedidoResponseDTO();
         respuesta.setId(pedidoGuardado.getId());
@@ -207,7 +205,7 @@ public class PedidoService {
     public void cancelarPedido(Long clienteId, Long pedidoId) {
 
     	// Buscar el pedido
-        Optional<Pedido> pedido = pedidoRepository.buscarPorID(pedidoId);
+        Optional<Pedido> pedido = pedidoRepository.findById(pedidoId);
 
         // El usuario que intenta cancelarlo es el dueño del pedido??
         if (!pedido.get().getClienteId().equals(clienteId)) {
@@ -220,7 +218,7 @@ public class PedidoService {
         }
 
         // Eliminar pedido
-        pedidoRepository.eliminar(pedidoId);
+        pedidoRepository.deleteById(pedidoId);
         
     }
     

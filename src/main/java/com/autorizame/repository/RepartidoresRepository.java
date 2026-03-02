@@ -3,14 +3,12 @@ package com.autorizame.repository;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+
 import com.autorizame.models.entity.Repartidor;
 
-public interface RepartidoresRepository {
+public interface RepartidoresRepository extends JpaRepository<Repartidor, Long> {
 
-	Repartidor guardar(Repartidor repartidor);
-	Optional<Repartidor> buscarPorCorreo(String correo);
-	List<Repartidor> listarRepartidoresPorEmpresa(Long id);
-	Optional<Repartidor> buscarPorID(Long id);
-	void eliminarRepartidor(Long id);
-	
+	Optional<Repartidor> findByCorreo(String correo);
+	List<Repartidor> findByEmpresaId(Long empresaId);
 }

@@ -1,16 +1,12 @@
 package com.autorizame.repository;
 
-import java.util.List;
 import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.autorizame.models.entity.EmpresaRepartidora;
 
-public interface EmpresaRepository {
+public interface EmpresaRepository extends JpaRepository<EmpresaRepartidora, Long> {
 
-	EmpresaRepartidora guardar(EmpresaRepartidora empresa);
-	Optional<EmpresaRepartidora> buscarPorNombre(String nombre);
-	List<EmpresaRepartidora> listarEmpresas();
-	Optional<EmpresaRepartidora> buscarPorID(Long id);
-	void borrarEmpresa(Long id);
-	
+	Optional<EmpresaRepartidora> findByNombre(String nombre);
 }

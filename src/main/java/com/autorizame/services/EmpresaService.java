@@ -25,7 +25,7 @@ public class EmpresaService {
 	public EmpresaResponseDTO registrarEmpresa(EmpresaRegistroDTO dto) {
 		
 		// Comprobar si el nombre de la empresa existe
-		if (empresaRepository.buscarPorNombre(dto.getNombre()).isPresent()) {
+		if (empresaRepository.findByNombre(dto.getNombre()).isPresent()) {
 			throw new EmpresaDuplicadaException("El nombre de la empresa " + dto.getNombre() + " ya está registrada en el sistema.");
 		}
 				
@@ -37,7 +37,7 @@ public class EmpresaService {
 		nuevaEmpresa.setTelefono(dto.getTelefono());
 				
 		// Guardar empresa en el repositorio
-		EmpresaRepartidora empresaGuardada = empresaRepository.guardar(nuevaEmpresa);
+		EmpresaRepartidora empresaGuardada = empresaRepository.save(nuevaEmpresa);
 				
 		EmpresaResponseDTO respuesta = new EmpresaResponseDTO();
 				
@@ -52,7 +52,7 @@ public class EmpresaService {
 	
 	public List<EmpresaResponseDTO> listarEmpresas() {
 	    
-	    List<EmpresaRepartidora> empresasEntidad = empresaRepository.listarEmpresas();
+	    List<EmpresaRepartidora> empresasEntidad = empresaRepository.findAll();
 	    
 	    List<EmpresaResponseDTO> listaRespuesta = new ArrayList<>();
 	    
@@ -72,10 +72,10 @@ public class EmpresaService {
 	
 	public EmpresaResponseDTO modificarEmpresa(Long id, EmpresaRegistroDTO dto) {
 	    
-	    EmpresaRepartidora empresaExistente = empresaRepository.buscarPorID(id)
+	    EmpresaRepartidora empresaExistente = empresaRepository.findById(id)
 	            .orElseThrow(() -> new RecursoNoEncontradoException("No existe la empresa con id " + id));
 
-	    Optional<EmpresaRepartidora> coincidencia = empresaRepository.buscarPorNombre(dto.getNombre());
+	    Optional<EmpresaRepartidora> coincidencia = empresaRepository.findByNombre(dto.getNombre());
 	    
 	    if (coincidencia.isPresent()) {
 	        if (!coincidencia.get().getId().equals(id)) {
@@ -89,7 +89,7 @@ public class EmpresaService {
 	    empresaExistente.setCorreo(dto.getCorreo());
 	    empresaExistente.setTelefono(dto.getTelefono());
 	                    
-	    EmpresaRepartidora empresaGuardada = empresaRepository.guardar(empresaExistente);
+	    EmpresaRepartidora empresaGuardada = empresaRepository.save(empresaExistente);
 	                    
 	    EmpresaResponseDTO respuesta = new EmpresaResponseDTO();
 	    respuesta.setId(empresaGuardada.getId());
@@ -102,11 +102,11 @@ public class EmpresaService {
 	
 	public void eliminarEmpresa(Long id) {
 		
-		if(!empresaRepository.buscarPorID(id).isPresent()) {
+		if(!empresaRepository.findById(id).isPresent()) {
 			throw new RecursoNoEncontradoException("No se puede eliminar. La empresa con id " + id + " no existe.");
 		}
 		
-		empresaRepository.borrarEmpresa(id);
+		empresaRepository.deleteById(id);
 	}
 	
 }

@@ -2,16 +2,43 @@ package com.autorizame.models.entity;
 
 import java.time.LocalDateTime;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "pedidos")
 public class Pedido {
 	
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "cliente_id", nullable = false)
     private Long clienteId;
+
+    @Column(name = "autorizado_id")
     private Long autorizadoId;
+
+    @Column(length = 500)
     private String descripcion;
+
+    @Column(length = 255)
     private String direccion;
+
+    @Column(nullable = false, length = 20)
     private String estado;
+
+    @Column(name = "fecha_alta")
     private LocalDateTime fechaAlta;
+
+    @Column(name = "repartidor_id")
     private Long repartidorId;
+
+    @Column(name = "nombre_autorizado", length = 100)
     private String nombreAutorizado;
     
     public Pedido() {}
